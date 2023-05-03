@@ -4,7 +4,7 @@ import 'package:course_mobile/model/user_model.dart';
 import 'package:http/http.dart' as http;
 
 class UserAPI {
-  static login({
+  Future<UserModel?> login({
     required String phoneNumber,
     required String password,
   }) async {
@@ -27,5 +27,6 @@ class UserAPI {
     } catch (e) {
       rethrow;
     }
+    return null;
   }
 }

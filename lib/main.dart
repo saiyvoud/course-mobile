@@ -1,4 +1,5 @@
 import 'package:course_mobile/pages/auth/login_page.dart';
+import 'package:course_mobile/router/router.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -10,9 +11,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return  MaterialApp(
       debugShowCheckedModeBanner: false,
       home: LoginPage(),
+      onGenerateRoute: RouterAPI.generateRoutes,
     );
   }
 }
