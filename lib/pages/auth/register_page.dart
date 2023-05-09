@@ -1,74 +1,128 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables
-
 import 'package:course_mobile/components/colors.dart';
-import 'package:course_mobile/pages/home/home.dart';
-import 'package:course_mobile/provider/auth_provider.dart';
+import 'package:course_mobile/router/router.dart';
 import 'package:course_mobile/service/user_api.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:no_context_navigation/no_context_navigation.dart';
 import 'package:provider/provider.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+import '../../provider/auth_provider.dart';
+
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  var _eye = true;
-  // final //  ແມ່ນ parameter ຄົງທີ່ທີ່ບໍ່ມີຄ່າເລີ່ມ
-  //var  // ແມ່ນ parameter ທີ່ບໍ່ແນ່ນອນ,
-  // const // ແມ່ນ parameter ຄົງທີ່ທີ່ມີຄ່າເລີ່ມຕົ້ນ
-  // dynamic //  ແມ່ນ parameter ທີ່ບໍ່ແນ່ນອນ,
-  // List // ແມ່ນ parameter ທີ່ເກັບຂໍ້ມູນເປັນ list[], Widget , late // ແມ່ນ parameter ຄົງທີ່ທີ່ບໍ່ມີຄ່າເລີ່ມ ,
+class _RegisterPageState extends State<RegisterPage> {
+  final phoneNumber = TextEditingController();
+  final password = TextEditingController();
+  final firstName = TextEditingController();
+  final lastName = TextEditingController();
   final formKey = GlobalKey<FormState>();
-  final user = UserAPI();
-  TextEditingController phoneNumber = TextEditingController();
-  TextEditingController password = TextEditingController();
-
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   final auth = Provider<AuthProvider>(context);
-  //   super.initState();
-  // }
+  bool _eye = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.amber,
+        title: Text("ລົງທະບຽນ"),
+        centerTitle: true,
+      ),
       body: ChangeNotifierProvider(
         create: (_) => AuthProvider(),
         child: Consumer<AuthProvider>(builder: (_, authProvider, __) {
           if (authProvider.loading == true) {
             return CircularProgressIndicator();
           } else {
-            return Form(
-              key: formKey,
-              child: SingleChildScrollView(
+            return SingleChildScrollView(
+              child: Form(
+                key: formKey,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 80),
                       Center(
                         child: Image.asset(
                           "assets/images/login.png",
                           height: 200,
-                          fit: BoxFit.cover,
                         ),
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: 10),
                       Text(
-                        "ເຂົ້າສູ່ລະບົບຂອງທ່ານ",
+                        "ລົງທະບຽນເຂົ້າສູ່ລະບົບ",
                         style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black,
+                          color: primaryColorBlack,
+                          fontSize: 18,
                         ),
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: 10),
+                      Text(
+                        "ຊື່",
+                        style: TextStyle(
+                          color: primaryColorBlack,
+                          fontSize: 18,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Container(
+                        height: 60,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.grey.shade300),
+                        child: TextFormField(
+                          controller: firstName,
+                          keyboardType: TextInputType.phone,
+                          decoration: InputDecoration(
+                              hintText: "ຊື່ຂອງທ່ານ",
+                              border: InputBorder.none,
+                              prefixIcon: Icon(Icons.person)),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "ຊື່ຫ້າມວ່າງ";
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      Text(
+                        "ນາມສະກຸນ",
+                        style: TextStyle(
+                          color: primaryColorBlack,
+                          fontSize: 18,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Container(
+                        height: 60,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.grey.shade300),
+                        child: TextFormField(
+                          controller: lastName,
+                          keyboardType: TextInputType.phone,
+                          decoration: InputDecoration(
+                              hintText: "ນາມສະກຸນຂອງທ່ານ",
+                              border: InputBorder.none,
+                              prefixIcon: Icon(Icons.person)),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "ນາມສະກຸນຫ້າມວ່າງ";
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 10),
                       Text(
                         "ເບີໂທລະສັບ",
-                        style: TextStyle(fontSize: 15),
+                        style: TextStyle(
+                          color: primaryColorBlack,
+                          fontSize: 18,
+                        ),
                       ),
                       SizedBox(height: 10),
                       Container(
@@ -80,12 +134,12 @@ class _LoginPageState extends State<LoginPage> {
                           controller: phoneNumber,
                           keyboardType: TextInputType.phone,
                           decoration: InputDecoration(
-                              hintText: "+856 20 xxxxxx",
+                              hintText: "20 xxxxxx",
                               border: InputBorder.none,
                               prefixIcon: Icon(Icons.call)),
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return "ເບີໂທຫ້າມວ່າງ";
+                              return "ຊື່ຫ້າມວ່າງ";
                             } else if (value.length == 10) {
                               return null;
                             }
@@ -126,50 +180,32 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       SizedBox(height: 20),
-                      
                       Center(
                         child: Container(
                           height: 60,
                           width: MediaQuery.of(context).size.width / 1,
                           child: ElevatedButton(
                             style: ButtonStyle(
-                              shadowColor:
-                                  MaterialStateProperty.all(Colors.red),
-                              backgroundColor:
-                                  MaterialStateProperty.all(primaryColorGreen),
-                            ),
-                            onPressed: () async {
-                              if (formKey.currentState!.validate()) {
-                                authProvider.login(
-                                  phoneNumber: phoneNumber.text,
-                                  password: password.text,
-                                );
-                              }
-                            },
-                            child: Text(
-                              "ເຂົ້າສູ່ລະບົບ",
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      Center(
-                        child: Container(
-                          height: 60,
-                          width: MediaQuery.of(context).size.width / 1,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                           
                               backgroundColor:
                                   MaterialStateProperty.all(primaryColors),
                             ),
                             onPressed: () async {
-                              Navigator.pushNamed(context, "/register");
+                              if (formKey.currentState!.validate()) {
+                                //  await authProvider.register(
+                                //     firstName: firstName.text,
+                                //     lastName: lastName.text,
+                                //     phoneNumber: phoneNumber.text,
+                                //     password: password.text,
+                                //   );
+                                //   Navigator.pushNamed(context, RouterAPI.home);
+                                await authProvider.otp(
+                                  firstName: firstName.text,
+                                  lastName: lastName.text,
+                                  phoneNumber: phoneNumber.text,
+                                  password: password.text,
+                                );
+                                Navigator.pushNamed(context, RouterAPI.otp);
+                              }
                             },
                             child: Text(
                               "ລົງທະບຽນ",
