@@ -1,4 +1,4 @@
-package com.course_mobile.shop
+package com.course.mobile
 
 import io.flutter.embedding.android.FlutterActivity
 

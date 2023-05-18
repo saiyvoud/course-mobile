@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:course_mobile/model/user_model.dart';
 import 'package:http/http.dart' as http;
 
+import '../components/api.dart';
+
 class UserAPI {
   Future<UserModel?> register({
     required String firstName,
@@ -19,7 +21,7 @@ class UserAPI {
         "password": password,
       };
       var response = await http.post(
-        Uri.parse("https://nodeserver-yp2b.onrender.com/api/v1/user/register"),
+        Uri.parse("${baseUrl}/api/v1/user/register"),
         body: body,
         headers: header,
       );
@@ -45,7 +47,7 @@ class UserAPI {
         "password": password,
       };
       var response = await http.post(
-        Uri.parse("https://nodeserver-yp2b.onrender.com/api/v1/user/login"),
+        Uri.parse("${baseUrl}/api/v1/user/login"),
         body: body,
         headers: header,
       );

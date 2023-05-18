@@ -1,33 +1,70 @@
 {
   "project_info": {
-    "project_number": "240808288323",
-    "project_id": "course-parts-shop",
-    "storage_bucket": "course-parts-shop.appspot.com"
+    "project_number": "167948135993",
+    "project_id": "anousith-f6c6c",
+    "storage_bucket": "anousith-f6c6c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:240808288323:android:5057840bbbca8cace8b4f6",
+        "mobilesdk_app_id": "1:167948135993:android:f47ed8df9678a8fc7a67e8",
         "android_client_info": {
-          "package_name": "com.course_mobile.shop"
+          "package_name": "com.anousith.express"
         }
       },
       "oauth_client": [
         {
-          "client_id": "240808288323-1h45jjr5sc6hv49pgrtb1dmquim63nf8.apps.googleusercontent.com",
+          "client_id": "167948135993-v4a2s2quauk3o7259ka4mbk3g6msggn3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.anousith.express",
+            "certificate_hash": "816e9d2870662c7d30198160c306c965ad738856"
+          }
+        },
+        {
+          "client_id": "167948135993-34k0a5hnsp06565heri6rr91qgdrslat.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB9YuLTGBTH9zuUejaVIQrS5pWBDqxXMPg"
+          "current_key": "AIzaSyBjnTgxUBDRMt7twtvlXZN-Mo3LbNn7d9c"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "240808288323-1h45jjr5sc6hv49pgrtb1dmquim63nf8.apps.googleusercontent.com",
+              "client_id": "167948135993-34k0a5hnsp06565heri6rr91qgdrslat.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:167948135993:android:9e9f40009e45619e7a67e8",
+        "android_client_info": {
+          "package_name": "com.course.mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "167948135993-34k0a5hnsp06565heri6rr91qgdrslat.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjnTgxUBDRMt7twtvlXZN-Mo3LbNn7d9c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "167948135993-34k0a5hnsp06565heri6rr91qgdrslat.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
