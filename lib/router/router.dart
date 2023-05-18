@@ -23,9 +23,8 @@ class RouterAPI {
         );
       case otp:
         return MaterialPageRoute(
-          builder: (context) => ChangeNotifierProvider(
-            create: (_) => AuthProvider()
-            ..sendOTP(),
+          builder: (context) => Provider(
+            create: (BuildContext context) => AuthProvider()..sendOTP(),
             child: OtpPage(),
           ),
         );

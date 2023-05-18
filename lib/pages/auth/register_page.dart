@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:course_mobile/components/colors.dart';
 import 'package:course_mobile/router/router.dart';
 import 'package:course_mobile/service/user_api.dart';
@@ -75,7 +76,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             color: Colors.grey.shade300),
                         child: TextFormField(
                           controller: firstName,
-                          keyboardType: TextInputType.phone,
+                          keyboardType: TextInputType.name,
                           decoration: InputDecoration(
                               hintText: "ຊື່ຂອງທ່ານ",
                               border: InputBorder.none,
@@ -103,7 +104,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             color: Colors.grey.shade300),
                         child: TextFormField(
                           controller: lastName,
-                          keyboardType: TextInputType.phone,
+                          keyboardType: TextInputType.name,
                           decoration: InputDecoration(
                               hintText: "ນາມສະກຸນຂອງທ່ານ",
                               border: InputBorder.none,
@@ -191,20 +192,26 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                             onPressed: () async {
                               if (formKey.currentState!.validate()) {
-                                //  await authProvider.register(
-                                //     firstName: firstName.text,
-                                //     lastName: lastName.text,
-                                //     phoneNumber: phoneNumber.text,
-                                //     password: password.text,
-                                //   );
-                                //   Navigator.pushNamed(context, RouterAPI.home);
                                 await authProvider.otp(
                                   firstName: firstName.text,
                                   lastName: lastName.text,
                                   phoneNumber: phoneNumber.text,
                                   password: password.text,
                                 );
-                                Navigator.pushNamed(context, RouterAPI.otp);
+                                if (authProvider.sucess == true) {
+                                  Navigator.pushNamed(context, RouterAPI.otp);
+                                } else {
+                                  AwesomeDialog(
+                                    context: context,
+                                    dialogType: DialogType.warning,
+                                    animType: AnimType.rightSlide,
+                                    title: 'ແຈ້ງເຕືອນ',
+                                    desc:
+                                        'ເກີດຂໍ້ຜິດພາດໃນການລົງທະບຽນ',
+                                    btnCancelOnPress: () {},
+                                    btnOkOnPress: () {},
+                                  )..show();
+                                }
                               }
                             },
                             child: Text(

@@ -9,39 +9,81 @@ import 'package:no_context_navigation/no_context_navigation.dart';
 class AuthProvider extends ChangeNotifier {
   final auth = FirebaseAuth.instance;
   final userApi = UserAPI();
-  var _verificationId ;
+  var _sucess = false;
+  var _verificationId;
   var _userModel = UserModel();
   var _loading = false;
   get userModel => _userModel;
   get loading => _loading;
   get verificationId => _verificationId;
+  get sucess => _sucess;
   FlutterSecureStorage storage = FlutterSecureStorage(); //
+
+  Future<void> verifyOTP({required String otp}) async {
+    try {
+      if (_verificationId == null || _verificationId == "") {
+        _sucess = false;
+        notifyListeners();
+      } else {
+        PhoneAuthCredential credential = PhoneAuthProvider.credential(
+            verificationId: verificationId, smsCode: otp);
+        if (credential.smsCode == otp) {
+          signInWithPhone(credential);
+        }
+      }
+    } catch (e) {
+      _sucess = false;
+      rethrow;
+    }
+  }
+
+  Future<void> signInWithPhone(PhoneAuthCredential credential) async {
+    try {
+      UserCredential userCredential =
+          await auth.signInWithCredential(credential);
+      if (userCredential.user != null) {
+        register();
+      } else {
+        _sucess = false;
+        notifyListeners();
+      }
+    } catch (e) {
+      _sucess = false;
+      notifyListeners();
+      rethrow;
+    }
+  }
 
   Future<void> sendOTP() async {
     try {
-      String? phoneNumber = await storage.read(key: "phonNumber");
+      String? phoneNumber = await storage.read(key: "phoneNumber");
+      _loading = true;
+      notifyListeners();
       await auth.verifyPhoneNumber(
         phoneNumber: "+856${phoneNumber}",
-        timeout: Duration(seconds: 60),
+        //timeout: Duration(seconds: 60),
         verificationCompleted: (phoneAuthCredential) {
-          /// 
-          print("======> Success");
+          ///
+          _sucess = true;
+          notifyListeners();
         },
-        verificationFailed: (error){
-         print('=====>Error Send OTP${error}');
-        }, 
-       codeSent: (verificationId,forceResendingToken){
-           _verificationId = verificationId ;
-           notifyListeners();
-       }, 
-       codeAutoRetrievalTimeout: (verificationId){
-         _verificationId = verificationId;
-       },
-       );
+        verificationFailed: (error) {
+          _sucess = false;
+          notifyListeners();
+        },
+        codeSent: (verificationId, forceResendingToken) {
+          _verificationId = verificationId;
+          notifyListeners();
+        },
+        codeAutoRetrievalTimeout: (verificationId) {
+          _verificationId = verificationId;
+        },
+      );
     } catch (e) {
       rethrow;
     }
   }
+
   Future<void> otp({
     required String firstName,
     required String lastName,
@@ -49,11 +91,22 @@ class AuthProvider extends ChangeNotifier {
     required String password,
   }) async {
     try {
+      _loading = true;
+      notifyListeners();
+      await storage.delete(key: "firstName");
+      await storage.delete(key: "lastName");
+      await storage.delete(key: "phoneNumber");
+      await storage.delete(key: "password");
       await storage.write(key: "firstName", value: firstName);
       await storage.write(key: "lastName", value: lastName);
       await storage.write(key: "phoneNumber", value: phoneNumber);
       await storage.write(key: "password", value: password);
+      _loading = false;
+      _sucess = true;
+      notifyListeners();
     } catch (e) {
+      _sucess = false;
+      notifyListeners();
       print("Error =====>$e");
     }
   }
@@ -68,15 +121,7 @@ class AuthProvider extends ChangeNotifier {
       if (result != null) {
         print("=======> Login Successful");
         _userModel = result;
-        // AwesomeDialog(
-        //   context: _context!,
-        //   dialogType: DialogType.success,
-        //   animType: AnimType.rightSlide,
-        //   title: 'Dialog Title',
-        //   desc: 'Dialog description here.............',
-        //   btnCancelOnPress: () {},
-        //   btnOkOnPress: () {},
-        // )..show();
+       
         navService.pushNamed(RouterAPI.home);
         _loading = false;
         notifyListeners();
@@ -90,24 +135,24 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> register(
-      {required String firstName,
-      required String lastName,
-      required String phoneNumber,
-      required String password}) async {
+  Future<void> register() async {
     try {
       _loading = true;
       notifyListeners();
+      String? firstName = await storage.read(key: "phoneNumber");
+      String? lastName = await storage.read(key: "phoneNumber");
+      String? phoneNumber = await storage.read(key: "phoneNumber");
+      String? password = await storage.read(key: "phoneNumber");
       final result = await userApi.register(
-          firstName: firstName,
-          lastName: lastName,
-          phoneNumber: phoneNumber,
-          password: password);
-
+        firstName: firstName!,
+        lastName: lastName!,
+        phoneNumber: phoneNumber!,
+        password: password!,
+      );
       if (result != null) {
         _userModel = result;
-        navService.pushNamed(RouterAPI.home);
         _loading = false;
+        _sucess = true;
         notifyListeners();
       } else {
         print("=======> ເບີໂທ ແລະ ລະຫັດຜ່ານບໍ່ຖທກຕ້ອງ");
@@ -115,6 +160,8 @@ class AuthProvider extends ChangeNotifier {
         notifyListeners();
       }
     } catch (e) {
+      _sucess = false;
+      notifyListeners();
       rethrow;
     }
   }
