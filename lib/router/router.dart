@@ -2,9 +2,7 @@ import 'package:course_mobile/pages/auth/otp.dart';
 import 'package:course_mobile/pages/auth/register_page.dart';
 import 'package:course_mobile/pages/home/home.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../provider/auth_provider.dart';
 
 class RouterAPI {
   static const home = "/home";
@@ -23,10 +21,7 @@ class RouterAPI {
         );
       case otp:
         return MaterialPageRoute(
-          builder: (context) => Provider(
-            create: (BuildContext context) => AuthProvider()..sendOTP(),
-            child: OtpPage(),
-          ),
+          builder: (context) => OtpPage(),
         );
       default:
         throw const FormatException("Route not found! check routes again!");

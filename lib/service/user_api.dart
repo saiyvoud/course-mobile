@@ -26,7 +26,6 @@ class UserAPI {
         headers: header,
       );
       if (response.statusCode == 200) {
-        print(response.body);
         final UserModel user = UserModel.fromJson(jsonDecode(response.body));
         return user;
       }

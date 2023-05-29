@@ -1,11 +1,9 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:course_mobile/components/colors.dart';
 import 'package:course_mobile/router/router.dart';
-import 'package:course_mobile/service/user_api.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:no_context_navigation/no_context_navigation.dart';
+
 import 'package:provider/provider.dart';
 
 import '../../provider/auth_provider.dart';
@@ -193,10 +191,10 @@ class _RegisterPageState extends State<RegisterPage> {
                             onPressed: () async {
                               if (formKey.currentState!.validate()) {
                                 await authProvider.otp(
-                                  firstName: firstName.text,
-                                  lastName: lastName.text,
-                                  phoneNumber: phoneNumber.text,
-                                  password: password.text,
+                                  firstName: firstName.text.trim(),
+                                  lastName: lastName.text.trim(),
+                                  phoneNumber: phoneNumber.text.trim(),
+                                  password: password.text.trim(),
                                 );
                                 if (authProvider.sucess == true) {
                                   Navigator.pushNamed(context, RouterAPI.otp);
