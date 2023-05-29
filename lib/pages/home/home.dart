@@ -1,6 +1,7 @@
 import 'package:course_mobile/components/banner.dart';
 import 'package:course_mobile/components/colors.dart';
 import 'package:course_mobile/components/menu.dart';
+import 'package:course_mobile/components/product.dart';
 import 'package:course_mobile/components/styple.dart';
 import 'package:flutter/material.dart';
 
@@ -103,7 +104,14 @@ class _HomePageState extends State<HomePage> {
             BannerComponent(),
             SizedBox(height: 10),
             MenuComponent(),
-            
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Text(
+                "Popular",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+            ProductComponent(),
           ],
         ),
       ),

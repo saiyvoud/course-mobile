@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'package:course_mobile/components/colors.dart';
-import 'package:course_mobile/pages/home/home.dart';
+
 import 'package:course_mobile/provider/auth_provider.dart';
 import 'package:course_mobile/service/user_api.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
 
   // @override
   // void initState() {
-  //   // TODO: implement initState
+
   //   final auth = Provider<AuthProvider>(context);
   //   super.initState();
   // }

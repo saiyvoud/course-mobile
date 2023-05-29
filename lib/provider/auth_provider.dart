@@ -23,7 +23,6 @@ class AuthProvider extends ChangeNotifier {
     try {
       if (_verificationId == null || _verificationId == "") {
         _sucess = false;
-        notifyListeners();
       } else {
         PhoneAuthCredential credential = PhoneAuthProvider.credential(
             verificationId: verificationId, smsCode: otp);
@@ -42,43 +41,38 @@ class AuthProvider extends ChangeNotifier {
       UserCredential userCredential =
           await auth.signInWithCredential(credential);
       if (userCredential.user != null) {
-        register();
+        await register();
       } else {
         _sucess = false;
         notifyListeners();
       }
     } catch (e) {
-      _sucess = false;
-      notifyListeners();
       rethrow;
     }
   }
 
   Future<void> sendOTP() async {
     try {
-      String? phoneNumber = await storage.read(key: "phoneNumber");
       _loading = true;
       notifyListeners();
+      String? phoneNumber = await storage.read(key: "phoneNumber");
       await auth.verifyPhoneNumber(
         phoneNumber: "+856${phoneNumber}",
-        //timeout: Duration(seconds: 60),
         verificationCompleted: (phoneAuthCredential) {
           ///
-          _sucess = true;
-          notifyListeners();
+          _loading = false;
+          // notifyListeners();
         },
-        verificationFailed: (error) {
-          _sucess = false;
-          notifyListeners();
-        },
+        verificationFailed: (error) {},
         codeSent: (verificationId, forceResendingToken) {
           _verificationId = verificationId;
-          notifyListeners();
         },
         codeAutoRetrievalTimeout: (verificationId) {
           _verificationId = verificationId;
         },
       );
+      _loading = false;
+      notifyListeners();
     } catch (e) {
       rethrow;
     }
@@ -105,8 +99,6 @@ class AuthProvider extends ChangeNotifier {
       _sucess = true;
       notifyListeners();
     } catch (e) {
-      _sucess = false;
-      notifyListeners();
       print("Error =====>$e");
     }
   }
@@ -121,7 +113,7 @@ class AuthProvider extends ChangeNotifier {
       if (result != null) {
         print("=======> Login Successful");
         _userModel = result;
-       
+
         navService.pushNamed(RouterAPI.home);
         _loading = false;
         notifyListeners();
@@ -139,10 +131,10 @@ class AuthProvider extends ChangeNotifier {
     try {
       _loading = true;
       notifyListeners();
-      String? firstName = await storage.read(key: "phoneNumber");
-      String? lastName = await storage.read(key: "phoneNumber");
+      String? firstName = await storage.read(key: "firstName");
+      String? lastName = await storage.read(key: "lastName");
       String? phoneNumber = await storage.read(key: "phoneNumber");
-      String? password = await storage.read(key: "phoneNumber");
+      String? password = await storage.read(key: "password");
       final result = await userApi.register(
         firstName: firstName!,
         lastName: lastName!,
