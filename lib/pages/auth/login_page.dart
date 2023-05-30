@@ -1,10 +1,13 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:course_mobile/components/colors.dart';
 
 import 'package:course_mobile/provider/auth_provider.dart';
+import 'package:course_mobile/router/router.dart';
 import 'package:course_mobile/service/user_api.dart';
 import 'package:flutter/material.dart';
+import 'package:no_context_navigation/no_context_navigation.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
@@ -126,7 +129,6 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       SizedBox(height: 20),
-                      
                       Center(
                         child: Container(
                           height: 60,
@@ -140,10 +142,23 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             onPressed: () async {
                               if (formKey.currentState!.validate()) {
-                                authProvider.login(
+                                await authProvider.login(
                                   phoneNumber: phoneNumber.text,
                                   password: password.text,
                                 );
+                                if (authProvider.sucess == true) {
+                                  navService.pushNamed(RouterAPI.bottombar);
+                                } else {
+                                  AwesomeDialog(
+                                    context: context,
+                                    dialogType: DialogType.warning,
+                                    animType: AnimType.rightSlide,
+                                    title: 'ແຈ້ງເຕືອນ',
+                                    desc: 'ເບີໂທ ແລະ ລະຫັດຜ່ານບໍ່ຖືກ!',
+                                    btnCancelOnPress: () {},
+                                    btnOkOnPress: () {},
+                                  )..show();
+                                }
                               }
                             },
                             child: Text(
@@ -164,7 +179,6 @@ class _LoginPageState extends State<LoginPage> {
                           width: MediaQuery.of(context).size.width / 1,
                           child: ElevatedButton(
                             style: ButtonStyle(
-                           
                               backgroundColor:
                                   MaterialStateProperty.all(primaryColors),
                             ),

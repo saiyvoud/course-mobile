@@ -21,11 +21,12 @@ class UserAPI {
         "password": password,
       };
       var response = await http.post(
-        Uri.parse("${baseUrl}/api/v1/user/register"),
+        Uri.parse("${baseUrl}/user/register"),
         body: body,
         headers: header,
       );
       if (response.statusCode == 200) {
+        print("=======>${response.body}");
         final UserModel user = UserModel.fromJson(jsonDecode(response.body));
         return user;
       }
@@ -46,7 +47,7 @@ class UserAPI {
         "password": password,
       };
       var response = await http.post(
-        Uri.parse("${baseUrl}/api/v1/user/login"),
+        Uri.parse("${baseUrl}/user/login"),
         body: body,
         headers: header,
       );

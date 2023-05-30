@@ -1,1 +1,1 @@
-const baseUrl = "https://server-deploy-uutz.onrender.com";
+const baseUrl = "https://server-deploy-uutz.onrender.com/api/v1";

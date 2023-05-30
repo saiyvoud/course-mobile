@@ -1,10 +1,9 @@
 import 'package:course_mobile/model/user_model.dart';
-import 'package:course_mobile/router/router.dart';
+
 import 'package:course_mobile/service/user_api.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:no_context_navigation/no_context_navigation.dart';
 
 class AuthProvider extends ChangeNotifier {
   final auth = FirebaseAuth.instance;
@@ -27,6 +26,7 @@ class AuthProvider extends ChangeNotifier {
         PhoneAuthCredential credential = PhoneAuthProvider.credential(
             verificationId: verificationId, smsCode: otp);
         if (credential.smsCode == otp) {
+          print("=======>Ok========");
           signInWithPhone(credential);
         }
       }
@@ -41,10 +41,11 @@ class AuthProvider extends ChangeNotifier {
       UserCredential userCredential =
           await auth.signInWithCredential(credential);
       if (userCredential.user != null) {
+        print("=======>SignInWithPhone========");
         await register();
       } else {
+        print("=======>Erorrr========");
         _sucess = false;
-        notifyListeners();
       }
     } catch (e) {
       rethrow;
@@ -54,7 +55,6 @@ class AuthProvider extends ChangeNotifier {
   Future<void> sendOTP() async {
     try {
       _loading = true;
-      notifyListeners();
       String? phoneNumber = await storage.read(key: "phoneNumber");
       await auth.verifyPhoneNumber(
         phoneNumber: "+856${phoneNumber}",
@@ -86,7 +86,7 @@ class AuthProvider extends ChangeNotifier {
   }) async {
     try {
       _loading = true;
-      notifyListeners();
+      // notifyListeners();
       await storage.delete(key: "firstName");
       await storage.delete(key: "lastName");
       await storage.delete(key: "phoneNumber");
@@ -107,20 +107,16 @@ class AuthProvider extends ChangeNotifier {
       {required String phoneNumber, required String password}) async {
     try {
       _loading = true;
-      notifyListeners();
       final result =
           await userApi.login(phoneNumber: phoneNumber, password: password);
       if (result != null) {
-        print("=======> Login Successful");
         _userModel = result;
-
-        navService.pushNamed(RouterAPI.home);
+        _sucess = true;
         _loading = false;
         notifyListeners();
       } else {
         print("=======> ເບີໂທ ແລະ ລະຫັດຜ່ານບໍ່ຖທກຕ້ອງ");
         _loading = false;
-        notifyListeners();
       }
     } catch (e) {
       rethrow;
@@ -130,7 +126,6 @@ class AuthProvider extends ChangeNotifier {
   Future<void> register() async {
     try {
       _loading = true;
-      notifyListeners();
       String? firstName = await storage.read(key: "firstName");
       String? lastName = await storage.read(key: "lastName");
       String? phoneNumber = await storage.read(key: "phoneNumber");
@@ -141,19 +136,19 @@ class AuthProvider extends ChangeNotifier {
         phoneNumber: phoneNumber!,
         password: password!,
       );
-      if (result != null) {
+      if (result!.id != null) {
+        print("=======>Success========");
         _userModel = result;
         _loading = false;
-        _sucess = true;
+         _sucess = true;
         notifyListeners();
       } else {
-        print("=======> ເບີໂທ ແລະ ລະຫັດຜ່ານບໍ່ຖທກຕ້ອງ");
+        print("=======> ເບີໂທ ແລະ ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ end");
         _loading = false;
+        _sucess = false;
         notifyListeners();
       }
     } catch (e) {
-      _sucess = false;
-      notifyListeners();
       rethrow;
     }
   }

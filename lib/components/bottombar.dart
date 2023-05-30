@@ -12,24 +12,29 @@ class _BottomBarState extends State<BottomBar> {
   int _currenwidget = 0;
   List<Widget> _children = [
     HomePage(), // 0
-     Container(height: 200,decoration: BoxDecoration(color: Colors.red),), // 1
-    Container(height: 200,decoration: BoxDecoration(color: Colors.red),), //2
-  
-    
+    Container(
+      height: 200,
+      decoration: BoxDecoration(color: Colors.red),
+    ), // 1
+    Container(
+      height: 200,
+      decoration: BoxDecoration(color: Colors.red),
+    ), //2
   ];
   void _onTap(int index) {
     setState(() {
       _currenwidget = index;
     });
   }
+
   @override
   Widget build(BuildContext context) {
-   return Scaffold(
+    return Scaffold(
       body: _children[_currenwidget],
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
         selectedItemColor: Colors.orange,
-        selectedLabelStyle: TextStyle(fontSize: 12,color: Colors.white),
+        selectedLabelStyle: TextStyle(fontSize: 12, color: Colors.white),
         unselectedLabelStyle: TextStyle(fontSize: 12),
         type: BottomNavigationBarType.fixed,
         currentIndex: _currenwidget,
@@ -38,7 +43,7 @@ class _BottomBarState extends State<BottomBar> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: "ໜ້າຫຼັກ",
-          ),        
+          ),
           BottomNavigationBarItem(
             icon: Stack(
               children: [
@@ -65,7 +70,6 @@ class _BottomBarState extends State<BottomBar> {
           ),
         ],
       ),
-   
     );
   }
 }
