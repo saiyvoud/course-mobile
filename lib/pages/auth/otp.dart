@@ -172,7 +172,7 @@ class _OtpPageState extends State<OtpPage> {
                                 ///=====>
                                 await authProvider.verifyOTP(otp: otp.text);
                                 if (authProvider.sucess == true) {
-                                  Navigator.pushNamed(context, RouterAPI.home);
+                                  Navigator.pushNamed(context, RouterAPI.bottombar);
                                 } else {
                                   AwesomeDialog(
                                     context: context,
