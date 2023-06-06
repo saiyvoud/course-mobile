@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
+import 'dart:async';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:course_mobile/components/bottombar.dart';
 import 'package:course_mobile/components/colors.dart';
 
 import 'package:course_mobile/provider/auth_provider.dart';
@@ -29,18 +32,26 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController phoneNumber = TextEditingController();
   TextEditingController password = TextEditingController();
 
-  // @override
-  // void initState() {
+  @override
+  void initState() {
+    super.initState();
+    Timer(Duration(seconds: 3), () {
+      Provider.of<AuthProvider>(context, listen: false)..validateToken();
+    });
+  }
 
-  //   final auth = Provider<AuthProvider>(context);
-  //   super.initState();
-  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ChangeNotifierProvider(
         create: (_) => AuthProvider(),
         child: Consumer<AuthProvider>(builder: (_, authProvider, __) {
+          if (authProvider.sucess == false) {
+            return LoginPage();
+          }
+          if (authProvider.sucess == true) {
+            return BottomBar();
+          }
           if (authProvider.loading == true) {
             return CircularProgressIndicator();
           } else {

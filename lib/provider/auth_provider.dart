@@ -18,6 +18,25 @@ class AuthProvider extends ChangeNotifier {
   get sucess => _sucess;
   FlutterSecureStorage storage = FlutterSecureStorage(); //
 
+
+ Future<void> validateToken ()async{
+ final token =  await storage.read(key: 'token');
+   if(token == null || token == ""){
+    _sucess = false;
+   }else{
+    await refreshToken();
+   }
+ }
+Future<void> refreshToken()async{
+  var result = await userApi.refreshToken();
+  if(result!.id != null){
+    _sucess = true;
+    notifyListeners();
+  }else{
+    _sucess = false;
+  }
+}
+
   Future<void> verifyOTP({required String otp}) async {
     try {
       if (_verificationId == null || _verificationId == "") {
@@ -60,8 +79,7 @@ class AuthProvider extends ChangeNotifier {
         phoneNumber: "+856${phoneNumber}",
         verificationCompleted: (phoneAuthCredential) {
           ///
-          _loading = false;
-          // notifyListeners();
+          _loading = false; 
         },
         verificationFailed: (error) {},
         codeSent: (verificationId, forceResendingToken) {

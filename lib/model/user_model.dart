@@ -6,6 +6,8 @@ class UserModel {
   final String? lastName;
   final String? phoneNumber;
   final String? profile;
+  final String? token;
+   final String? refreshToken;
   final Bool? is_Active;
 
   UserModel({
@@ -15,6 +17,8 @@ class UserModel {
     this.phoneNumber,
     this.profile,
     this.is_Active,
+    this.token,
+    this.refreshToken,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
@@ -24,6 +28,8 @@ class UserModel {
         phoneNumber: json['phoneNumber'],
         profile: json['profile'],
         is_Active: json['is_Active'],
+        token: json['token'],
+        refreshToken: json['refreshToken']
       );
 
   Map<String, dynamic> toJson() => {
@@ -32,6 +38,8 @@ class UserModel {
         "lastName": lastName,
         "phoneNumber": phoneNumber,
         "is_Active": is_Active,
-        "profile": profile
+        "profile": profile,
+        "token": token,
+        "refreshToken": refreshToken,
       };
 }
