@@ -1,7 +1,11 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
+
+
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:course_mobile/components/bottombar.dart';
 import 'package:course_mobile/components/colors.dart';
+import 'package:course_mobile/components/loading.dart';
 
 import 'package:course_mobile/provider/auth_provider.dart';
 import 'package:course_mobile/router/router.dart';
@@ -29,18 +33,17 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController phoneNumber = TextEditingController();
   TextEditingController password = TextEditingController();
 
-  // @override
-  // void initState() {
+ 
 
-  //   final auth = Provider<AuthProvider>(context);
-  //   super.initState();
-  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ChangeNotifierProvider(
         create: (_) => AuthProvider(),
         child: Consumer<AuthProvider>(builder: (_, authProvider, __) {
+          if (authProvider.sucess == true) {
+            return BottomBar();
+          }
           if (authProvider.loading == true) {
             return CircularProgressIndicator();
           } else {
@@ -146,9 +149,13 @@ class _LoginPageState extends State<LoginPage> {
                                   phoneNumber: phoneNumber.text,
                                   password: password.text,
                                 );
+                                if(authProvider.loading == true){
+                                  loading(context);
+                                }
                                 if (authProvider.sucess == true) {
                                   navService.pushNamed(RouterAPI.bottombar);
                                 } else {
+
                                   AwesomeDialog(
                                     context: context,
                                     dialogType: DialogType.warning,
