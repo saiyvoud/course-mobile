@@ -8,7 +8,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class AuthProvider extends ChangeNotifier {
   final auth = FirebaseAuth.instance;
   final userApi = UserAPI();
-  var _sucess = false;
+  var _sucess;
   var _verificationId;
   var _userModel = UserModel();
   var _loading = false;
@@ -18,24 +18,37 @@ class AuthProvider extends ChangeNotifier {
   get sucess => _sucess;
   FlutterSecureStorage storage = FlutterSecureStorage(); //
 
-
- Future<void> validateToken ()async{
- final token =  await storage.read(key: 'token');
-   if(token == null || token == ""){
-    _sucess = false;
-   }else{
-    await refreshToken();
-   }
- }
-Future<void> refreshToken()async{
-  var result = await userApi.refreshToken();
-  if(result!.id != null){
-    _sucess = true;
-    notifyListeners();
-  }else{
-    _sucess = false;
+  Future<void> validateToken() async {
+    try {
+      final token = await storage.read(key: "token");
+      print("=====>${token}");
+      if (token == null || token == "") {
+        _sucess = false;
+        notifyListeners();
+      } else {
+        // refreshToken();
+       _sucess = true;
+        notifyListeners();
+      }
+    } catch (e) {
+      rethrow;
+    }
   }
-}
+
+  Future<void> refreshToken() async {
+    var result = await userApi.refreshToken();
+    if (result!.id != null) {
+      await storage.delete(key: "token");
+      await storage.delete(key: "refreshToken");
+      await storage.write(key: "token", value: result.token);
+      await storage.write(key: "refreshToken", value: result.refreshToken);
+      _sucess = true;
+      notifyListeners();
+    } else {
+      _sucess = false;
+      notifyListeners();
+    }
+  }
 
   Future<void> verifyOTP({required String otp}) async {
     try {
@@ -79,9 +92,11 @@ Future<void> refreshToken()async{
         phoneNumber: "+856${phoneNumber}",
         verificationCompleted: (phoneAuthCredential) {
           ///
-          _loading = false; 
+          _loading = false;
         },
-        verificationFailed: (error) {},
+        verificationFailed: (error) {
+          _loading = false;
+        },
         codeSent: (verificationId, forceResendingToken) {
           _verificationId = verificationId;
         },
@@ -121,20 +136,27 @@ Future<void> refreshToken()async{
     }
   }
 
-  Future<void> login(
-      {required String phoneNumber, required String password}) async {
+  Future<void> login({
+    required String phoneNumber,
+    required String password,
+  }) async {
+    _loading = true;
     try {
-      _loading = true;
       final result =
           await userApi.login(phoneNumber: phoneNumber, password: password);
-      if (result != null) {
+
+      if (result!.id != null) {
+        await storage.delete(key: "token");
+        await storage.delete(key: "refreshToken");
+        await storage.write(key: "token", value: result.token);
+        _loading = false;
         _userModel = result;
         _sucess = true;
-        _loading = false;
+
         notifyListeners();
       } else {
-        print("=======> ເບີໂທ ແລະ ລະຫັດຜ່ານບໍ່ຖທກຕ້ອງ");
         _loading = false;
+        print("========> Faild");
       }
     } catch (e) {
       rethrow;
@@ -155,10 +177,9 @@ Future<void> refreshToken()async{
         password: password!,
       );
       if (result!.id != null) {
-        print("=======>Success========");
         _userModel = result;
         _loading = false;
-         _sucess = true;
+        _sucess = true;
         notifyListeners();
       } else {
         print("=======> ເບີໂທ ແລະ ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ end");
@@ -169,5 +190,13 @@ Future<void> refreshToken()async{
     } catch (e) {
       rethrow;
     }
+  }
+
+  Future<void> logOut() async {
+    await storage.delete(key: "token");
+    await storage.delete(key: "refreshToken");
+    await storage.delete(key: "user");
+    _sucess = true;
+    notifyListeners();
   }
 }

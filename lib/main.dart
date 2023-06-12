@@ -1,10 +1,10 @@
 // ignore_for_file: deprecated_member_use
-
-import 'package:course_mobile/pages/auth/login_page.dart';
+import 'package:course_mobile/components/bottombar.dart';
+import 'package:course_mobile/pages/splash/splash_screen.dart';
 import 'package:course_mobile/provider/auth_provider.dart';
+import 'package:course_mobile/provider/product_provider.dart';
 import 'package:course_mobile/router/router.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
-
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -35,10 +35,11 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => ProductProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: LoginPage(),
+        home: SplashScreen(),
         onGenerateRoute: RouterAPI.generateRoutes,
       ),
     );

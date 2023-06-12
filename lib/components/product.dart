@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:provider/provider.dart';
+
+import '../provider/product_provider.dart';
 
 class ProductComponent extends StatefulWidget {
   const ProductComponent({super.key});
@@ -10,6 +13,12 @@ class ProductComponent extends StatefulWidget {
 }
 
 class _ProductComponentState extends State<ProductComponent> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<ProductProvider>(context, listen: false)..fecthProduct();
+  }
+
   var data = [
     {
       "name": "product1",
@@ -98,80 +107,41 @@ class _ProductComponentState extends State<ProductComponent> {
   ];
   @override
   Widget build(BuildContext context) {
-    // return MasonryGridView.builder(
-    //   // mainAxisSpacing: 4,
-    //   // crossAxisSpacing: 4,
-      
-    //   gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
-    //     crossAxisCount: 2,
-        
-    //   ),
-    //   shrinkWrap: true,
-    //   primary: false,
-    //   itemCount: data.length,
-      
-    //   itemBuilder: (context, index) {
-    //     return Card(
-    //       child: Container(
-    //         child: Padding(
-    //           padding: const EdgeInsets.all(8.0),
-    //           child: Column(
-    //             crossAxisAlignment: CrossAxisAlignment.start,
-    //             children: [
-    //               Image.asset(
-    //                 "${data[index]['image']}",
-    //                  fit: BoxFit.cover,
-    //                  width: double.infinity,
-    //               ),
-    //               SizedBox(height: 10),
-    //               Text("${data[index]['name']}"),
-    //               SizedBox(height: 10),
-    //               Text("${data[index]['desc']}"),
-    //               SizedBox(height: 10),
-    //               Text(
-    //                 "${data[index]['price']} Lak",
-    //                 style: TextStyle(
-    //                   fontSize: 18,
-    //                   color: Colors.red,
-    //                   fontWeight: FontWeight.bold,
-    //                 ),
-    //               ),
-    //             ],
-    //           ),
-    //         ),
-    //       ),
-    //     );
-    //   },
-    // );
-
-    return StaggeredGrid.count(
-      crossAxisCount: 4,
-      // mainAxisSpacing: 4,
-      // crossAxisSpacing: 4,
-      children: data.map((e) {
-       double result = double.parse(e['index'].toString());
-        return StaggeredGridTile.count(
-          crossAxisCellCount: 2,
-          mainAxisCellCount: result,
-          child: Card(
+    return Consumer<ProductProvider>(builder: (_, productProvider, __) {
+      if (productProvider.productLoading == true) {
+        return CircularProgressIndicator();
+      }
+      return MasonryGridView.builder(
+        mainAxisSpacing: 4,
+        crossAxisSpacing: 4,
+        gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          
+        ),
+        shrinkWrap: true,
+        primary: false,
+        itemCount: productProvider.productList!.length,
+        itemBuilder: (context, index) {
+          final data = productProvider.productList;
+          return Card(
             child: Container(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Image.asset(
-                      "${e['image']}",
+                    Image.network(
+                      "${data![index].image}",
                       fit: BoxFit.cover,
                       width: double.infinity,
                     ),
                     SizedBox(height: 10),
-                    Text("${e['name']}"),
+                    Text("${data[index].name}"),
                     SizedBox(height: 10),
-                    Text("${e['desc']}"),
+                    Text("${data[index].detail}"),
                     SizedBox(height: 10),
                     Text(
-                      "${e['price']} Lak",
+                      "${data[index].price} Lak",
                       style: TextStyle(
                         fontSize: 18,
                         color: Colors.red,
@@ -182,10 +152,55 @@ class _ProductComponentState extends State<ProductComponent> {
                 ),
               ),
             ),
-          ),
-        );
-      }).toList(),
-    );
+          );
+        },
+      );
+    });
+   
+    // return Consumer<ProductProvider>(builder: (_, productProvider, __) {
+    //   if (productProvider.productLoading == true) {
+    //     return CircularProgressIndicator();
+    //   }
+    //   return StaggeredGrid.count(
+    //     crossAxisCount: 4,
+    //     children: productProvider.productList!.map((e) {
+    //       return StaggeredGridTile.count(
+    //         crossAxisCellCount: 2,
+    //         mainAxisCellCount: 3,
+    //         child: Card(
+    //           child: Container(
+    //             child: Padding(
+    //               padding: const EdgeInsets.all(8.0),
+    //               child: Column(
+    //                 crossAxisAlignment: CrossAxisAlignment.start,
+    //                 children: [
+    //                   Image.network(
+    //                     "${e.image}",
+    //                     fit: BoxFit.cover,
+    //                     width: double.infinity,
+    //                   ),
+    //                   SizedBox(height: 10),
+    //                   Text("${e.name}"),
+    //                   SizedBox(height: 10),
+    //                   Text("${e.detail}"),
+    //                   SizedBox(height: 10),
+    //                   Text(
+    //                     "${e.price.toString()} Lak",
+    //                     style: TextStyle(
+    //                       fontSize: 18,
+    //                       color: Colors.red,
+    //                       fontWeight: FontWeight.bold,
+    //                     ),
+    //                   ),
+    //                 ],
+    //               ),
+    //             ),
+    //           ),
+    //         ),
+    //       );
+    //     }).toList(),
+    //   );
+    // });
  
   }
 }

@@ -5,7 +5,6 @@ import 'dart:async';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:course_mobile/components/colors.dart';
 import 'package:course_mobile/router/router.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
@@ -28,10 +27,8 @@ class _OtpPageState extends State<OtpPage> {
   @override
   void initState() {
     super.initState();
-    //Provider.of<AuthProvider>(context)..sendOTP();   
     Provider.of<AuthProvider>(context, listen: false)..sendOTP();
-  
-   // startTime();
+    startTime();
   }
 
   Future<void> startTime() async {
@@ -56,37 +53,7 @@ class _OtpPageState extends State<OtpPage> {
     });
   }
 
-  final auth = FirebaseAuth.instance;
 
-  // var _verificationId;
-  // Future<void> sendOTP() async {
-  //   try {
-  //     await auth.verifyPhoneNumber(
-  //       phoneNumber: "+8562096794376",
-  //       //timeout: Duration(seconds: 60),
-  //       verificationCompleted: (PhoneAuthCredential phoneAuthCredential) {
-  //         ///
-
-  //         print("======> Success");
-  //       },
-  //       verificationFailed: (error) {
-  //         print('=====>Error Send OTP${error}');
-  //       },
-  //       codeSent: (verificationId, forceResendingToken) {
-  //         setState(() {
-  //           _verificationId = verificationId;
-  //         });
-  //       },
-  //       codeAutoRetrievalTimeout: (verificationId) {
-  //         setState(() {
-  //           _verificationId = verificationId;
-  //         });
-  //       },
-  //     );
-  //   } catch (e) {
-  //     rethrow;
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -203,7 +170,7 @@ class _OtpPageState extends State<OtpPage> {
                           ),
                         ),
                         onPressed: () {
-                          /// =====>
+                         
                           startTime();
                           if (start == 0) {
                             AuthProvider()..sendOTP();

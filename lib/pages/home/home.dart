@@ -1,9 +1,11 @@
 import 'package:course_mobile/components/banner.dart';
 import 'package:course_mobile/components/colors.dart';
 import 'package:course_mobile/components/menu.dart';
-import 'package:course_mobile/components/product.dart';
+
 import 'package:course_mobile/components/styple.dart';
 import 'package:flutter/material.dart';
+
+import '../../components/product.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

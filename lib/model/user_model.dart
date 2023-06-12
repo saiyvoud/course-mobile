@@ -1,4 +1,4 @@
-import 'dart:ffi';
+
 
 class UserModel {
   final String? id;
@@ -7,8 +7,8 @@ class UserModel {
   final String? phoneNumber;
   final String? profile;
   final String? token;
-   final String? refreshToken;
-  final Bool? is_Active;
+  final String? refreshToken;
+  final bool? is_Active;
 
   UserModel({
     this.id,

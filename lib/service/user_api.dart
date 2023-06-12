@@ -24,11 +24,9 @@ class UserAPI {
         headers: header,
       );
       if (response.statusCode == 200) {
-        final UserModel user = UserModel.fromJson(jsonDecode(response.body));
-        await storage.delete(key: "token");
-        await storage.delete(key: "refreshToken");
-        await storage.write(key: "token", value: user.token);
-        await storage.write(key: "refreshToken", value: user.refreshToken);
+         final data = jsonDecode(response.body);
+        final UserModel user = UserModel.fromJson(jsonDecode(data['data']));
+     
         return user;
       }
     } catch (e) {
@@ -56,13 +54,13 @@ class UserAPI {
         body: body,
         headers: header,
       );
-      if (response.statusCode == 200) {
-        print("=======>${response.body}");
-        final UserModel user = UserModel.fromJson(jsonDecode(response.body));
+      if (response.statusCode == 201) {
+        final data = jsonDecode(response.body);
+        final UserModel user = UserModel.fromJson(jsonDecode(data['data']));
         await storage.delete(key: "token");
         await storage.delete(key: "refreshToken");
-        await storage.write(key: "token", value: user.token);
-        await storage.write(key: "refreshToken", value: user.refreshToken);
+        await storage.write(key: "token", value: data['token']);
+        await storage.write(key: "refreshToken", value: data['refreshToken']);
         return user;
       }
     } catch (e) {
@@ -86,12 +84,14 @@ class UserAPI {
         body: body,
         headers: header,
       );
-      if (response.statusCode == 200) {
-        final UserModel user = UserModel.fromJson(jsonDecode(response.body));
+      if (response.statusCode == 200) {   
+        var data = jsonDecode(response.body);
+        final UserModel user = UserModel.fromJson(data['data']);
+        print(user.token);
         await storage.delete(key: "token");
         await storage.delete(key: "refreshToken");
-        await storage.write(key: "token", value: user.token);
-        await storage.write(key: "refreshToken", value: user.refreshToken);
+        await storage.write(key: "token", value: data['token']);
+        await storage.write(key: "refreshToken", value: data['refreshToken']);
         return user;
       }
     } catch (e) {
