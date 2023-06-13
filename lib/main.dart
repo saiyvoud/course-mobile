@@ -1,5 +1,4 @@
 // ignore_for_file: deprecated_member_use
-import 'package:course_mobile/components/bottombar.dart';
 import 'package:course_mobile/pages/splash/splash_screen.dart';
 import 'package:course_mobile/provider/auth_provider.dart';
 import 'package:course_mobile/provider/product_provider.dart';
