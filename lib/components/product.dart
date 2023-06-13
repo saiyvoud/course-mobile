@@ -1,3 +1,4 @@
+import 'package:course_mobile/router/router.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -111,44 +112,52 @@ class _ProductComponentState extends State<ProductComponent> {
       if (productProvider.productLoading == true) {
         return CircularProgressIndicator();
       }
+      if (productProvider.productList!.length == 0 ||
+          productProvider.productList == null) {
+        return CircularProgressIndicator();
+      }
       return MasonryGridView.builder(
         mainAxisSpacing: 4,
         crossAxisSpacing: 4,
         gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          
         ),
         shrinkWrap: true,
         primary: false,
         itemCount: productProvider.productList!.length,
         itemBuilder: (context, index) {
           final data = productProvider.productList;
-          return Card(
-            child: Container(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Image.network(
-                      "${data![index].image}",
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                    ),
-                    SizedBox(height: 10),
-                    Text("${data[index].name}"),
-                    SizedBox(height: 10),
-                    Text("${data[index].detail}"),
-                    SizedBox(height: 10),
-                    Text(
-                      "${data[index].price} Lak",
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
+          return InkWell(
+            onTap: (){
+              Navigator.pushNamed(context, RouterAPI.detail_home);
+            },
+            child: Card(
+              child: Container(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Image.network(
+                        "${data![index].image}",
+                        fit: BoxFit.cover,
+                        width: double.infinity,
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 10),
+                      Text("${data[index].name}"),
+                      SizedBox(height: 10),
+                      Text("${data[index].detail}"),
+                      SizedBox(height: 10),
+                      Text(
+                        "${data[index].price} Lak",
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -156,7 +165,7 @@ class _ProductComponentState extends State<ProductComponent> {
         },
       );
     });
-   
+
     // return Consumer<ProductProvider>(builder: (_, productProvider, __) {
     //   if (productProvider.productLoading == true) {
     //     return CircularProgressIndicator();
@@ -201,6 +210,5 @@ class _ProductComponentState extends State<ProductComponent> {
     //     }).toList(),
     //   );
     // });
- 
   }
 }

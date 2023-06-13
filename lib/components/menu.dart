@@ -47,10 +47,21 @@ class _MenuComponentState extends State<MenuComponent> {
     Provider.of<ProductProvider>(context, listen: false)..fecthVehicle();
   }
 
+  int currentIndex = 0;
+
+  void _onTap(int index) {
+    setState(() {
+      currentIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<ProductProvider>(builder: (_, productProvider, __) {
       if (productProvider.loading == true) {
+        return CircularProgressIndicator();
+      }
+      if (productProvider.productList == null) {
         return CircularProgressIndicator();
       }
       return Container(
@@ -64,38 +75,49 @@ class _MenuComponentState extends State<MenuComponent> {
             itemCount: productProvider.vehicleList!.length,
             itemBuilder: (context, index) {
               final data = productProvider.vehicleList;
-              return Row(
-                children: [
-                  SizedBox(width: 10),
-                  Container(
-                    height: 60,
-                    width: 150,
-                    decoration: BoxDecoration(
-                        color: primaryColorWhite,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Row(
-                      children: [
-                        SizedBox(width: 10),
-                        Image.network(
-                          data![index].image!,
-                          fit: BoxFit.cover,
-                          height: 30,
-                          width: 30,
-                        ),
-                        SizedBox(width: 10),
-                        Container(
-                           // width: 50,
-                            child: Text(
-                              data[index].name!,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontSize: 11),
-                            ))
-                      ],
+              return InkWell(
+                onTap: () {
+                  _onTap(index);
+                  productProvider.fechProductByVehicle(
+                      vehicleId: data[index].id!);
+                },
+                child: Row(
+                  children: [
+                    SizedBox(width: 10),
+                    Container(
+                      height: 60,
+                      width: 150,
+                      decoration: BoxDecoration(
+                          color: primaryColorWhite,
+                          border: Border.all(
+                              color: currentIndex == index
+                                  ? Colors.orange
+                                  : primaryColorWhite),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Row(
+                        children: [
+                          SizedBox(width: 10),
+                          Image.network(
+                            data![index].image!,
+                            fit: BoxFit.cover,
+                            height: 30,
+                            width: 30,
+                          ),
+                          SizedBox(width: 10),
+                          Container(
+                              // width: 50,
+                              child: Text(
+                            data[index].name!,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontSize: 11),
+                          ))
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 5),
-                ],
+                    SizedBox(width: 5),
+                  ],
+                ),
               );
             }),
       );

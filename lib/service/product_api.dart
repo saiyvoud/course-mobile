@@ -12,21 +12,22 @@ import '../model/banner_model.dart';
 
 class ProductApi {
   FlutterSecureStorage storage = FlutterSecureStorage();
-  
-  Future<List<VehicleModel>?> fecthVehicle()async{
-     try {
+
+  Future<List<VehicleModel>?> fecthVehicle() async {
+    try {
       Map<String, String> header = {
         "Content-type": "application/json",
         "Accept": "application/json",
         "token": "${await storage.read(key: "token")}",
       };
-      final  response = await http.get(
+      final response = await http.get(
         Uri.parse("${baseUrl}/vehicle/getAll"),
         headers: header,
       );
       final data = jsonDecode(response.body);
-      if (data['status'] == true) { 
+      if (data['status'] == true) {
         final vehicle = vehicleModelFromJson(jsonEncode(data['data']));
+     
         return vehicle;
       }
     } catch (e) {
@@ -42,13 +43,12 @@ class ProductApi {
         "Accept": "application/json",
         "token": "${await storage.read(key: "token")}",
       };
-      final  response = await http.get(
+      final response = await http.get(
         Uri.parse("${baseUrl}/banner/getAll"),
         headers: header,
       );
-     // final data = await ResponseApi.fromJson(jsonDecode(response.body));
       final data = jsonDecode(response.body);
-      if (data['status'] == true) { 
+      if (data['status'] == true) {
         final banner = bannerModelFromJson(jsonEncode(data['data']));
         return banner;
       }
@@ -61,17 +61,19 @@ class ProductApi {
   Future<List<ProductModel>?> fecthProduct() async {
     try {
       Map<String, String> header = {
-         "Content-type": "application/json",
+        "Content-type": "application/json",
         "Accept": "application/json",
         "token": "${await storage.read(key: "token")}",
       };
+      final vehicleId = await storage.read(key: "vehicleId");
+       print("=========>${vehicleId}");
       var response = await http.get(
-        Uri.parse("${baseUrl}/parts/getAll"),
+        Uri.parse("${baseUrl}/parts/getByVehicle/${vehicleId}"),
         headers: header,
       );
-       final data = jsonDecode(response.body);
+       print("=========>${response.body}");
+      final data = jsonDecode(response.body);
       if (data['status'] == true) {
-        print("=========>${data['data']}");
         final product = productModelFromJson(jsonEncode(data['data']));
         return product;
       }
@@ -80,7 +82,4 @@ class ProductApi {
     }
     return null;
   }
-
 }
-
-

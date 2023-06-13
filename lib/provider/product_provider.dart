@@ -2,10 +2,12 @@ import 'package:course_mobile/model/banner_model.dart';
 import 'package:course_mobile/model/product_model.dart';
 import 'package:course_mobile/service/product_api.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../model/vehicle_model.dart';
 
 class ProductProvider extends ChangeNotifier {
+  final storage = FlutterSecureStorage();
   bool _loading = false;
   bool _productLoading = false;
   bool _success = false;
@@ -23,12 +25,33 @@ class ProductProvider extends ChangeNotifier {
   get loading => _loading;
   get productLoading => _productLoading;
   get success => _success;
+  Future<void> fechProductByVehicle({required String vehicleId}) async {
+    _productLoading = true;
+    await storage.delete(key: "vehicleId");
+    await storage.write(key: "vehicleId", value: vehicleId);
+    try {
+      var result = await productApi.fecthProduct();
+      if (result!.length > 0) {
+        _productList = result;
+        _productLoading = false;
+        _success = true;
+        notifyListeners();
+      }
+      _productLoading = false;
+      _success = false;
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
+  }
 
   Future<void> fecthVehicle() async {
     _loading = true;
     try {
       var result = await productApi.fecthVehicle();
       if (result!.length > 0) {
+        await storage.delete(key: "vehicleId");
+        await storage.write(key: "vehicleId", value: result[0].id);
         _vehicleList = result;
         _loading = false;
         _success = true;
