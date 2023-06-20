@@ -1,4 +1,4 @@
-import 'package:course_mobile/router/router.dart';
+import 'package:course_mobile/pages/home/detail_home.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -20,92 +20,92 @@ class _ProductComponentState extends State<ProductComponent> {
     Provider.of<ProductProvider>(context, listen: false)..fecthProduct();
   }
 
-  var data = [
-    {
-      "name": "product1",
-      "desc": "desc1",
-      "price": "150,000",
-      "image": "assets/images/product1.png",
-      "index": 3
-    },
-    {
-      "name": "product2",
-      "desc": "desc2",
-      "price": "200,000",
-      "image": "assets/images/product2.png",
-      "index": 3.4
-    },
-    {
-      "name": "product3",
-      "desc": "desc3",
-      "price": "250,000",
-      "image": "assets/images/product3.png",
-      "index": 3
-    },
-    {
-      "name": "product4",
-      "desc": "desc4",
-      "price": "300,000",
-      "image": "assets/images/product4.png",
-      "index": 3.4
-    },
-    {
-      "name": "product5",
-      "desc": "desc5",
-      "price": "350,000",
-      "image": "assets/images/product5.png",
-      "index": 3
-    },
-    {
-      "name": "product6",
-      "desc": "desc6",
-      "price": "400,000",
-      "image": "assets/images/product1.png",
-      "index": 3.4
-    },
-    {
-      "name": "product1",
-      "desc": "desc1",
-      "price": "150,000",
-      "image": "assets/images/product1.png",
-      "index": 3
-    },
-    {
-      "name": "product2",
-      "desc": "desc2",
-      "price": "200,000",
-      "image": "assets/images/product2.png",
-      "index": 3.4
-    },
-    {
-      "name": "product3",
-      "desc": "desc3",
-      "price": "250,000",
-      "image": "assets/images/product3.png",
-      "index": 3
-    },
-    {
-      "name": "product4",
-      "desc": "desc4",
-      "price": "300,000",
-      "image": "assets/images/product4.png",
-      "index": 3.4
-    },
-    {
-      "name": "product5",
-      "desc": "desc5",
-      "price": "350,000",
-      "image": "assets/images/product5.png",
-      "index": 3
-    },
-    {
-      "name": "product6",
-      "desc": "desc6",
-      "price": "400,000",
-      "image": "assets/images/product1.png",
-      "index": 3.4
-    },
-  ];
+  // var data = [
+  //   {
+  //     "name": "product1",
+  //     "desc": "desc1",
+  //     "price": "150,000",
+  //     "image": "assets/images/product1.png",
+  //     "index": 3
+  //   },
+  //   {
+  //     "name": "product2",
+  //     "desc": "desc2",
+  //     "price": "200,000",
+  //     "image": "assets/images/product2.png",
+  //     "index": 3.4
+  //   },
+  //   {
+  //     "name": "product3",
+  //     "desc": "desc3",
+  //     "price": "250,000",
+  //     "image": "assets/images/product3.png",
+  //     "index": 3
+  //   },
+  //   {
+  //     "name": "product4",
+  //     "desc": "desc4",
+  //     "price": "300,000",
+  //     "image": "assets/images/product4.png",
+  //     "index": 3.4
+  //   },
+  //   {
+  //     "name": "product5",
+  //     "desc": "desc5",
+  //     "price": "350,000",
+  //     "image": "assets/images/product5.png",
+  //     "index": 3
+  //   },
+  //   {
+  //     "name": "product6",
+  //     "desc": "desc6",
+  //     "price": "400,000",
+  //     "image": "assets/images/product1.png",
+  //     "index": 3.4
+  //   },
+  //   {
+  //     "name": "product1",
+  //     "desc": "desc1",
+  //     "price": "150,000",
+  //     "image": "assets/images/product1.png",
+  //     "index": 3
+  //   },
+  //   {
+  //     "name": "product2",
+  //     "desc": "desc2",
+  //     "price": "200,000",
+  //     "image": "assets/images/product2.png",
+  //     "index": 3.4
+  //   },
+  //   {
+  //     "name": "product3",
+  //     "desc": "desc3",
+  //     "price": "250,000",
+  //     "image": "assets/images/product3.png",
+  //     "index": 3
+  //   },
+  //   {
+  //     "name": "product4",
+  //     "desc": "desc4",
+  //     "price": "300,000",
+  //     "image": "assets/images/product4.png",
+  //     "index": 3.4
+  //   },
+  //   {
+  //     "name": "product5",
+  //     "desc": "desc5",
+  //     "price": "350,000",
+  //     "image": "assets/images/product5.png",
+  //     "index": 3
+  //   },
+  //   {
+  //     "name": "product6",
+  //     "desc": "desc6",
+  //     "price": "400,000",
+  //     "image": "assets/images/product1.png",
+  //     "index": 3.4
+  //   },
+  // ];
   @override
   Widget build(BuildContext context) {
     return Consumer<ProductProvider>(builder: (_, productProvider, __) {
@@ -128,8 +128,15 @@ class _ProductComponentState extends State<ProductComponent> {
         itemBuilder: (context, index) {
           final data = productProvider.productList;
           return InkWell(
-            onTap: (){
-              Navigator.pushNamed(context, RouterAPI.detail_home);
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DetailHome(
+                    productModel: data[index],
+                  ),
+                ),
+              );
             },
             child: Card(
               child: Container(

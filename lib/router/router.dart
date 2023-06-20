@@ -1,7 +1,6 @@
 import 'package:course_mobile/components/bottombar.dart';
 import 'package:course_mobile/pages/auth/otp.dart';
 import 'package:course_mobile/pages/auth/register_page.dart';
-import 'package:course_mobile/pages/home/detail_home.dart';
 import 'package:course_mobile/pages/home/home.dart';
 import 'package:flutter/material.dart';
 
@@ -23,9 +22,7 @@ class RouterAPI {
           builder: (context) => const RegisterPage(),
         );
          case detail_home:
-        return MaterialPageRoute(
-          builder: (context) => const DetailHome(),
-        );
+       
       case otp:
         return MaterialPageRoute(
           builder: (context) => OtpPage(),

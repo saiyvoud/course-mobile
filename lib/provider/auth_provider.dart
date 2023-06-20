@@ -21,14 +21,17 @@ class AuthProvider extends ChangeNotifier {
   Future<void> validateToken() async {
     try {
       final token = await storage.read(key: "token");
+      final refreshTokens = await storage.read(key: "refreshToken");
       print("=====>${token}");
-      if (token == null || token == "") {
+      print("=====>${refreshTokens}");
+      if (token == null ||
+          token == "" ||
+          refreshTokens == null ||
+          refreshTokens == "") {
         _sucess = false;
         notifyListeners();
       } else {
-        // refreshToken();
-       _sucess = true;
-        notifyListeners();
+        refreshToken();
       }
     } catch (e) {
       rethrow;
@@ -37,7 +40,7 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> refreshToken() async {
     var result = await userApi.refreshToken();
-    if (result!.id != null) {
+    if (result!.token != null) {
       await storage.delete(key: "token");
       await storage.delete(key: "refreshToken");
       await storage.write(key: "token", value: result.token);
@@ -149,6 +152,7 @@ class AuthProvider extends ChangeNotifier {
         await storage.delete(key: "token");
         await storage.delete(key: "refreshToken");
         await storage.write(key: "token", value: result.token);
+        await storage.write(key: "refreshToken", value: result.refreshToken);
         _loading = false;
         _userModel = result;
         _sucess = true;
@@ -177,6 +181,10 @@ class AuthProvider extends ChangeNotifier {
         password: password!,
       );
       if (result!.id != null) {
+        await storage.delete(key: "token");
+        await storage.delete(key: "refreshToken");
+        await storage.write(key: "token", value: result.token);
+        await storage.write(key: "refreshToken", value: result.refreshToken);
         _userModel = result;
         _loading = false;
         _sucess = true;
