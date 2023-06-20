@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:course_mobile/model/refreshToken_model.dart';
 import 'package:course_mobile/model/user_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -8,12 +9,9 @@ import '../components/api.dart';
 
 class UserAPI {
   FlutterSecureStorage storage = FlutterSecureStorage();
-  Future<UserModel?> refreshToken() async {
+  Future<RefreshTokenModel?> refreshToken() async {
     try {
-      Map<String, String> header = {
-        "Accept": "application/json",
-        "token": "${await storage.read(key: "token")}",
-      };
+      Map<String, String> header = {"Accept": "application/json"};
       var body = {
         "token": await storage.read(key: "token"),
         "refreshToken": await storage.read(key: "refreshToken"),
@@ -23,10 +21,12 @@ class UserAPI {
         body: body,
         headers: header,
       );
+
       if (response.statusCode == 200) {
-         final data = jsonDecode(response.body);
-        final UserModel user = UserModel.fromJson(jsonDecode(data['data']));
-     
+        final data = jsonDecode(response.body);
+        var enCode = jsonEncode(data['data']);
+        var result = jsonDecode(enCode);
+        final RefreshTokenModel user = RefreshTokenModel.fromJson(result);
         return user;
       }
     } catch (e) {
@@ -57,10 +57,7 @@ class UserAPI {
       if (response.statusCode == 201) {
         final data = jsonDecode(response.body);
         final UserModel user = UserModel.fromJson(jsonDecode(data['data']));
-        await storage.delete(key: "token");
-        await storage.delete(key: "refreshToken");
-        await storage.write(key: "token", value: data['token']);
-        await storage.write(key: "refreshToken", value: data['refreshToken']);
+
         return user;
       }
     } catch (e) {
@@ -84,14 +81,10 @@ class UserAPI {
         body: body,
         headers: header,
       );
-      if (response.statusCode == 200) {   
+      if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
         final UserModel user = UserModel.fromJson(data['data']);
-        print(user.token);
-        await storage.delete(key: "token");
-        await storage.delete(key: "refreshToken");
-        await storage.write(key: "token", value: data['token']);
-        await storage.write(key: "refreshToken", value: data['refreshToken']);
+
         return user;
       }
     } catch (e) {
