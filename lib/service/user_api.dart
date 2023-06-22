@@ -56,8 +56,8 @@ class UserAPI {
       );
       if (response.statusCode == 201) {
         final data = jsonDecode(response.body);
+        await storeData(data['data']);
         final UserModel user = UserModel.fromJson(jsonDecode(data['data']));
-
         return user;
       }
     } catch (e) {
@@ -83,13 +83,36 @@ class UserAPI {
       );
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
+        await storeData(data['data']);
         final UserModel user = UserModel.fromJson(data['data']);
-
         return user;
       }
     } catch (e) {
       rethrow;
     }
     return null;
+  }
+
+  Future<UserModel?> getProfile() async {
+    try {
+      var user = await storage.read(key: 'user');
+      // final enCode = jsonEncode(decode);
+     
+      // final user = jsonDecode(enCode);
+      final UserModel data = UserModel.fromJson(jsonDecode(user!));
+      return data;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> storeData(data) async {
+    try {
+      await storage.delete(key: "user");
+      await storage.write(key: "user", value: jsonEncode(data));
+    } on Exception catch (e) {
+      print(e);
+      rethrow;
+    }
   }
 }

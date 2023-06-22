@@ -12,7 +12,7 @@ class AuthProvider extends ChangeNotifier {
   var _verificationId;
   var _userModel = UserModel();
   var _loading = false;
-  get userModel => _userModel;
+  UserModel get userModel => _userModel;
   get loading => _loading;
   get verificationId => _verificationId;
   get sucess => _sucess;
@@ -22,8 +22,6 @@ class AuthProvider extends ChangeNotifier {
     try {
       final token = await storage.read(key: "token");
       final refreshTokens = await storage.read(key: "refreshToken");
-      print("=====>${token}");
-      print("=====>${refreshTokens}");
       if (token == null ||
           token == "" ||
           refreshTokens == null ||
@@ -185,6 +183,7 @@ class AuthProvider extends ChangeNotifier {
         await storage.delete(key: "refreshToken");
         await storage.write(key: "token", value: result.token);
         await storage.write(key: "refreshToken", value: result.refreshToken);
+        //storeData(result);
         _userModel = result;
         _loading = false;
         _sucess = true;
@@ -201,10 +200,45 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> logOut() async {
-    await storage.delete(key: "token");
-    await storage.delete(key: "refreshToken");
-    await storage.delete(key: "user");
-    _sucess = true;
-    notifyListeners();
+    try {
+      await storage.delete(key: "token");
+      await storage.delete(key: "refreshToken");
+      await storage.delete(key: "user");
+      _sucess = true;
+      notifyListeners();
+    } on Exception catch (e) {
+      _sucess = false;
+      print(e);
+      rethrow;
+    }
   }
+
+  Future<void> getProfile() async {
+    _loading = true;
+    try {
+      final result = await userApi.getProfile();
+      if (result!.id != null) {
+         print("=======>Profile: ${result.firstName}");
+        _userModel = result;
+        _loading = false;
+        _sucess = true;
+        notifyListeners();
+      }
+      _loading = false;
+      _sucess = false;
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // Future<void> storeData(data) async {
+  //   try {
+  //     await storage.delete(key: "user");
+  //     await storage.write(key: "user", value: jsonEncode(data));
+  //   } on Exception catch (e) {
+  //     print(e);
+  //     rethrow;
+  //   }
+  // }
 }

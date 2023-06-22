@@ -67,7 +67,7 @@ class ProductProvider extends ChangeNotifier {
 
   Future<void> fecthProduct() async {
     _productLoading = true;
-    notifyListeners();
+   
     try {
       var result = await productApi.fecthProduct();
       if (result!.length > 0) {
@@ -86,7 +86,7 @@ class ProductProvider extends ChangeNotifier {
 
   Future<void> fecthBanner() async {
     _loading = true;
-    notifyListeners();
+    
     try {
       var result = await productApi.fecthBanner();
       if (result!.length > 0) {
