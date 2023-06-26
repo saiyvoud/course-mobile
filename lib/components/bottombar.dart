@@ -1,4 +1,5 @@
 import 'package:course_mobile/pages/home/home.dart';
+import 'package:course_mobile/pages/profile/profile.dart';
 import 'package:flutter/material.dart';
 
 class BottomBar extends StatefulWidget {
@@ -16,10 +17,7 @@ class _BottomBarState extends State<BottomBar> {
       height: 200,
       decoration: BoxDecoration(color: Colors.red),
     ), // 1
-    Container(
-      height: 200,
-      decoration: BoxDecoration(color: Colors.red),
-    ), //2
+   ProfilePage()
   ];
   void _onTap(int index) {
     setState(() {

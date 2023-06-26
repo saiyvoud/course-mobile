@@ -74,6 +74,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             color: Colors.grey.shade300),
                         child: TextFormField(
                           controller: firstName,
+                          
                           keyboardType: TextInputType.name,
                           decoration: InputDecoration(
                               hintText: "ຊື່ຂອງທ່ານ",

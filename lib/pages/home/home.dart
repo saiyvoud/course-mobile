@@ -1,11 +1,9 @@
 import 'package:course_mobile/components/banner.dart';
 import 'package:course_mobile/components/colors.dart';
 import 'package:course_mobile/components/menu.dart';
-
 import 'package:course_mobile/components/styple.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../components/product.dart';
 import '../../provider/product_provider.dart';
 
