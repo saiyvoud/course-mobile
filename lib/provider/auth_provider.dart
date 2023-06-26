@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthProvider extends ChangeNotifier {
+  
   final auth = FirebaseAuth.instance;
   final userApi = UserAPI();
   var _sucess;

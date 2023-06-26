@@ -96,9 +96,6 @@ class UserAPI {
   Future<UserModel?> getProfile() async {
     try {
       var user = await storage.read(key: 'user');
-      // final enCode = jsonEncode(decode);
-     
-      // final user = jsonDecode(enCode);
       final UserModel data = UserModel.fromJson(jsonDecode(user!));
       return data;
     } catch (e) {
