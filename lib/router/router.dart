@@ -2,6 +2,9 @@ import 'package:course_mobile/components/bottombar.dart';
 import 'package:course_mobile/pages/auth/otp.dart';
 import 'package:course_mobile/pages/auth/register_page.dart';
 import 'package:course_mobile/pages/home/home.dart';
+import 'package:course_mobile/pages/payment/address.dart';
+
+
 import 'package:flutter/material.dart';
 
 class RouterAPI {
@@ -10,7 +13,8 @@ class RouterAPI {
   static const register = "/register";
   static const otp = "/otp";
   static const bottombar = "/bottombar";
-  static const detail_home = "/bottombar";
+  static const payment = "/payment";
+  static const address = "/address";
   static Route<dynamic> generateRoutes(RouteSettings settings) {
     switch (settings.name) {
       case home:
@@ -21,8 +25,11 @@ class RouterAPI {
         return MaterialPageRoute(
           builder: (context) => const RegisterPage(),
         );
-         case detail_home:
-       
+      case address:
+        return MaterialPageRoute(
+          builder: (context) => const AddressPage(),
+        );
+
       case otp:
         return MaterialPageRoute(
           builder: (context) => OtpPage(),

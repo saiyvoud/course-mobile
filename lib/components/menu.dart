@@ -1,7 +1,7 @@
 import 'package:course_mobile/components/colors.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/widgets.dart';
+
 import 'package:provider/provider.dart';
 
 import '../provider/product_provider.dart';
