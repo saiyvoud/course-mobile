@@ -35,7 +35,7 @@ class _BannerComponentState extends State<BannerComponent> {
         children: [
           _banner(productProvider),
           SizedBox(height: 5),
-          //  _indicator(productProvider),
+           //_indicator(productProvider),
         ],
       );
     });

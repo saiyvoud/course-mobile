@@ -1,5 +1,6 @@
 import 'package:course_mobile/components/colors.dart';
 import 'package:course_mobile/provider/auth_provider.dart';
+import 'package:course_mobile/router/router.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -125,31 +126,32 @@ class _PaymentState extends State<Payment> {
                   ],
                 ),
                 SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('ວັນທີ່ຈັດສົ່ງ',
-                          style: TextStyle(fontSize: 12, color: Colors.black)),
-                      Text('10-01-2023',
-                          style: TextStyle(fontSize: 12, color: Colors.black)),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('ເວລາຈັດສົ່ງ',
-                          style: TextStyle(fontSize: 12, color: Colors.black)),
-                      Text('10:00 - 20:00',
-                          style: TextStyle(fontSize: 12, color: Colors.black)),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 10),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 5),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       Text('ວັນທີ່ຈັດສົ່ງ',
+                //           style: TextStyle(fontSize: 12, color: Colors.black)),
+                //       Text('10-01-2023',
+                //           style: TextStyle(fontSize: 12, color: Colors.black)),
+                //     ],
+                //   ),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 5),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       Text('ເວລາຈັດສົ່ງ',
+                //           style: TextStyle(fontSize: 12, color: Colors.black)),
+                //       Text('10:00 - 20:00',
+                //           style: TextStyle(fontSize: 12, color: Colors.black)),
+                //     ],
+                //   ),
+                // ),
+                // SizedBox(height: 10),
+               
                 Container(
                   height: 10,
                   decoration: BoxDecoration(color: Colors.grey.shade100),
@@ -166,7 +168,9 @@ class _PaymentState extends State<Payment> {
                             color: Colors.black)),
                     Spacer(),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, RouterAPI.address);
+                      },
                       icon: Icon(Icons.edit, color: Colors.green),
                     ),
                   ],

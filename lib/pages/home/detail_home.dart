@@ -1,6 +1,6 @@
 import 'package:course_mobile/components/colors.dart';
 import 'package:course_mobile/model/product_model.dart';
-import 'package:course_mobile/pages/home/payment.dart';
+import 'package:course_mobile/pages/payment/payment.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
