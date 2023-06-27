@@ -61,7 +61,7 @@ class _MenuComponentState extends State<MenuComponent> {
       if (productProvider.loading == true) {
         return CircularProgressIndicator();
       }
-      if (productProvider.productList == null) {
+      if (productProvider.vehicleList == null) {
         return CircularProgressIndicator();
       }
       return Container(
@@ -86,7 +86,7 @@ class _MenuComponentState extends State<MenuComponent> {
                     SizedBox(width: 10),
                     Container(
                       height: 60,
-                      width: 150,
+                      // width: 160,
                       decoration: BoxDecoration(
                           color: primaryColorWhite,
                           border: Border.all(
@@ -111,7 +111,8 @@ class _MenuComponentState extends State<MenuComponent> {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(fontSize: 11),
-                          ))
+                          )),
+                           SizedBox(width: 10),
                         ],
                       ),
                     ),

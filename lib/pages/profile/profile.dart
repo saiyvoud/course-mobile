@@ -1,9 +1,10 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:course_mobile/pages/auth/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/auth_provider.dart';
-import '../../router/router.dart';
+
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -27,7 +28,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 onPressed: () async {
                   await authProvider.logOut();
                   if (authProvider.sucess == true) {
-                    Navigator.pushNamed(context, RouterAPI.login);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => LoginPage()));
                   } else {
                     AwesomeDialog(
                       context: context,
