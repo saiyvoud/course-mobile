@@ -48,13 +48,9 @@ class AddressApi {
     return null;
   }
 
-  Future<AddressModel?> getByUser({
-    required String village,
-    required String district,
-    required String province,
-    required String latitude,
-    required String longitude,
-  }) async {
+  Future<AddressModel?> getByUser(
+   
+  ) async {
     try {
       Map<String, String> header = {
         "Accept": "application/json",

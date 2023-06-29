@@ -38,4 +38,19 @@ class AddressProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> getAddressByUser() async {
+    _loading = true;
+    final result = await addressApi.getByUser();
+    if (result!.id != null) {
+      _address = result;
+      _loading = false;
+      _success = true;
+      notifyListeners();
+    } else {
+      _loading = false;
+      _success = false;
+      notifyListeners();
+    }
+  }
 }
