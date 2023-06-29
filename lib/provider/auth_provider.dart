@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthProvider extends ChangeNotifier {
-  
   final auth = FirebaseAuth.instance;
   final userApi = UserAPI();
   var _sucess;
@@ -150,6 +149,8 @@ class AuthProvider extends ChangeNotifier {
       if (result!.id != null) {
         await storage.delete(key: "token");
         await storage.delete(key: "refreshToken");
+        await storage.delete(key: "userId");
+        await storage.write(key: "userId", value: result.id);
         await storage.write(key: "token", value: result.token);
         await storage.write(key: "refreshToken", value: result.refreshToken);
         _loading = false;
@@ -182,6 +183,8 @@ class AuthProvider extends ChangeNotifier {
       if (result!.id != null) {
         await storage.delete(key: "token");
         await storage.delete(key: "refreshToken");
+        await storage.delete(key: "userId");
+        await storage.write(key: "userId", value: result.id);
         await storage.write(key: "token", value: result.token);
         await storage.write(key: "refreshToken", value: result.refreshToken);
         //storeData(result);
@@ -205,6 +208,7 @@ class AuthProvider extends ChangeNotifier {
       await storage.delete(key: "token");
       await storage.delete(key: "refreshToken");
       await storage.delete(key: "user");
+      await storage.delete(key: "userId");
       _sucess = true;
       notifyListeners();
     } on Exception catch (e) {
@@ -219,7 +223,7 @@ class AuthProvider extends ChangeNotifier {
     try {
       final result = await userApi.getProfile();
       if (result!.id != null) {
-         print("=======>Profile: ${result.firstName}");
+        print("=======>Profile: ${result.firstName}");
         _userModel = result;
         _loading = false;
         _sucess = true;

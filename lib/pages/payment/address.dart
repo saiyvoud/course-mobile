@@ -1,7 +1,11 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:course_mobile/components/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:provider/provider.dart';
+
+import '../../provider/address_provider.dart';
 
 class AddressPage extends StatefulWidget {
   const AddressPage({super.key});
@@ -11,7 +15,6 @@ class AddressPage extends StatefulWidget {
 }
 
 class _AddressPageState extends State<AddressPage> {
-  
   TextEditingController village = TextEditingController();
   TextEditingController district = TextEditingController();
   TextEditingController province = TextEditingController();
@@ -20,17 +23,18 @@ class _AddressPageState extends State<AddressPage> {
   late PermissionStatus _permissionGranted;
   LocationData? userLocation;
   BitmapDescriptor? icon;
-@override
+  @override
   void initState() {
     super.initState();
     _getUserLocation();
     BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(size: Size(48, 48)), 'assets/icons/pin.png')
+            ImageConfiguration(size: Size(48, 48)), 'assets/icons/pin.png')
         .then((onValue) {
       icon = onValue;
     });
   }
   // This function will get user location
+
   Future<void> _getUserLocation() async {
     Location location = Location();
     // Check if location service is enable
@@ -62,7 +66,6 @@ class _AddressPageState extends State<AddressPage> {
         markerId: MarkerId('MarkerId'),
         position: LatLng(userLocation!.latitude!, userLocation!.longitude!),
         icon: icon!,
-        
         infoWindow:
             InfoWindow(title: 'This is a Title', snippet: 'this is a snippet'),
       ),
@@ -89,24 +92,59 @@ class _AddressPageState extends State<AddressPage> {
         ),
         centerTitle: true,
       ),
-      bottomNavigationBar: InkWell(
-        onTap: () {
-          if (formKey.currentState!.validate()) {}
-        },
-        child: Container(
-          height: 50,
-          decoration: BoxDecoration(color: Colors.yellow),
-          child: Center(
-              child: Text(
-            "ບັນທຶກ",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: primaryColorBlack,
-            ),
-          )),
-        ),
-      ),
+      bottomNavigationBar:
+          Consumer<AddressProvider>(builder: (_, addresProvider, __) {
+        // if (addresProvider.loading == true) {
+        //   return CircularProgressIndicator();
+        // }
+        return InkWell(
+          onTap: () async {
+            if (formKey.currentState!.validate()) {
+              await addresProvider.insert(
+                village: village.text,
+                district: district.text,
+                province: province.text,
+                latitude: userLocation!.latitude.toString(),
+                longitude: userLocation!.longitude.toString(),
+              );
+              if (addresProvider.success == true) {
+                AwesomeDialog(
+                  context: context,
+                  dialogType: DialogType.success,
+                  animType: AnimType.rightSlide,
+                  title: 'ແຈ້ງເຕືອນ',
+                  desc: 'ເພີ່ມສະຖານທີ່ຈັດສົ່ງແລ້ວ',
+                  btnCancelOnPress: () {},
+                  btnOkOnPress: () {},
+                )..show();
+              }else{
+                 AwesomeDialog(
+                  context: context,
+                  dialogType: DialogType.error,
+                  animType: AnimType.rightSlide,
+                  title: 'ແຈ້ງເຕືອນ',
+                  desc: 'ການເພີ່ມສະຖານທີ່ຈັດສົ່ງຜິດພາດ',
+                  btnCancelOnPress: () {},
+                  btnOkOnPress: () {},
+                )..show();
+              }
+            }
+          },
+          child: Container(
+            height: 50,
+            decoration: BoxDecoration(color: Colors.yellow),
+            child: Center(
+                child: Text(
+              "ບັນທຶກ",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: primaryColorBlack,
+              ),
+            )),
+          ),
+        );
+      }),
       body: Form(
         key: formKey,
         child: SingleChildScrollView(
@@ -176,8 +214,8 @@ class _AddressPageState extends State<AddressPage> {
                       decoration: BoxDecoration(color: Colors.yellow),
                       child: GoogleMap(
                         initialCameraPosition: CameraPosition(
-                          target:
-                              LatLng(userLocation!.latitude!, userLocation!.longitude!),
+                          target: LatLng(userLocation!.latitude!,
+                              userLocation!.longitude!),
                           zoom: 14,
                         ),
                         markers: myMarKer(),

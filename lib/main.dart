@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 import 'package:course_mobile/pages/splash/splash_screen.dart';
+import 'package:course_mobile/provider/address_provider.dart';
 import 'package:course_mobile/provider/auth_provider.dart';
 import 'package:course_mobile/provider/product_provider.dart';
 import 'package:course_mobile/router/router.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => ProductProvider()),
+        ChangeNotifierProvider(create: (_)=> AddressProvider())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

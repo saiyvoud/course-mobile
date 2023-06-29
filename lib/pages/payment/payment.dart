@@ -1,8 +1,10 @@
 import 'package:course_mobile/components/colors.dart';
+import 'package:course_mobile/provider/address_provider.dart';
 import 'package:course_mobile/provider/auth_provider.dart';
 import 'package:course_mobile/router/router.dart';
 
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../../model/product_model.dart';
@@ -17,12 +19,19 @@ class Payment extends StatefulWidget {
 }
 
 class _PaymentState extends State<Payment> {
+  BitmapDescriptor? icon;
   @override
   void initState() {
-   
     super.initState();
     Provider.of<AuthProvider>(context, listen: false)..getProfile();
+    Provider.of<AddressProvider>(context, listen: false)..getAddressByUser();
+    BitmapDescriptor.fromAssetImage(
+            ImageConfiguration(size: Size(48, 48)), 'assets/icons/pin.png')
+        .then((onValue) {
+      icon = onValue;
+    });
   }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<ProductProvider>(builder: (_, productProvider, __) {
@@ -82,7 +91,8 @@ class _PaymentState extends State<Payment> {
                             Text('ຊື່ ແລະ ນາມສະກຸນ',
                                 style: TextStyle(
                                     fontSize: 12, color: Colors.black)),
-                            Text('${authProvider.userModel.firstName} ${authProvider.userModel.lastName }',
+                            Text(
+                                '${authProvider.userModel.firstName} ${authProvider.userModel.lastName}',
                                 style: TextStyle(
                                     fontSize: 12, color: Colors.black)),
                           ],
@@ -102,7 +112,6 @@ class _PaymentState extends State<Payment> {
                           ],
                         ),
                       ),
-                     
                     ],
                   );
                 }),
@@ -151,7 +160,7 @@ class _PaymentState extends State<Payment> {
                 //   ),
                 // ),
                 // SizedBox(height: 10),
-               
+
                 Container(
                   height: 10,
                   decoration: BoxDecoration(color: Colors.grey.shade100),
@@ -176,43 +185,82 @@ class _PaymentState extends State<Payment> {
                   ],
                 ),
                 SizedBox(height: 10),
-                Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('ບ້ານ ເມືອງ ແຂວງ',
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.black)),
-                          Text('ຫ້ວຍຫົງ ຈັນທະບູລີ ນະຄອນຫຼວງວຽງຈັນ',
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.black)),
-                        ],
+                Consumer<AddressProvider>(
+                    builder: (context, addressProvider, child) {
+                  if (addressProvider.loading == true) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('ບ້ານ ເມືອງ ແຂວງ',
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.black)),
+                            Text('ຫ້ວຍຫົງ ຈັນທະບູລີ ນະຄອນຫຼວງວຽງຈັນ',
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.black)),
+                          ],
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('ປະເພດທີ່ຢູ່ອາໄສ',
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.black)),
-                          Text('ບ້ານ',
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.black)),
-                        ],
+                      SizedBox(height: 10),
+                      Container(
+                        height: 120,
+                        decoration: BoxDecoration(color: primaryColors),
+                        child: GoogleMap(
+                          initialCameraPosition: CameraPosition(
+                            target: LatLng(
+                              double.parse(
+                                addressProvider.address.latitude!,
+                              ),
+                              double.parse(
+                                addressProvider.address.longtitude!,
+                              ),
+                            ),
+                            zoom: 14,
+                          ),
+                          markers: <Marker>[
+                            Marker(
+                              markerId: MarkerId('MarkerId'),
+                              position: LatLng(
+                                double.parse(
+                                  addressProvider.address.latitude!,
+                                ),
+                                double.parse(
+                                  addressProvider.address.longtitude!,
+                                ),
+                              ),
+                              icon: icon!,
+                              infoWindow: InfoWindow(
+                                  title: 'This is a Title',
+                                  snippet: 'this is a snippet'),
+                            ),
+                          ].toSet(),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10),
-                Container(
-                  height: 120,
-                  decoration: BoxDecoration(color: primaryColors),
-                ),
+                      // Padding(
+                      //   padding: const EdgeInsets.symmetric(horizontal: 5),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //     children: [
+                      //       Text('ປະເພດທີ່ຢູ່ອາໄສ',
+                      //           style: TextStyle(
+                      //               fontSize: 12, color: Colors.black)),
+                      //       Text('ບ້ານ',
+                      //           style: TextStyle(
+                      //               fontSize: 12, color: Colors.black)),
+                      //     ],
+                      //   ),
+                      // ),
+                    ],
+                  );
+                }),
+
                 SizedBox(height: 10),
                 Container(
                   height: 10,
@@ -315,6 +363,6 @@ class _PaymentState extends State<Payment> {
           ),
         ),
       );
-     });
+    });
   }
 }
